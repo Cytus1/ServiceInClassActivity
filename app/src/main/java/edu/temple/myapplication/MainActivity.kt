@@ -13,6 +13,9 @@ import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
+
+    // commit test 2
+
     private var binder: TimerService.TimerBinder? = null
 
     private lateinit var textView: TextView
