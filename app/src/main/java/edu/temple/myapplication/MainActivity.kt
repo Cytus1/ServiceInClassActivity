@@ -1,5 +1,6 @@
 package edu.temple.myapplication
 
+import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
@@ -8,8 +9,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -78,6 +83,40 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                println("settings clicked")
+                true
+            }
+            R.id.action_about -> {
+                println("wifi clicked")
+                openSettings(Settings.ACTION_WIFI_SETTINGS)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun openSettings(action: String) {
+        val intent = Intent(action)
+        launchIntent(intent)
+    }
+
+    private fun launchIntent(intent: Intent) {
+        try {
+            startActivity(intent)
+        }
+        catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, "u mess up wifi", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun updateUI() {
         val b = binder ?: return
 
@@ -101,3 +140,4 @@ class MainActivity : AppCompatActivity() {
         unbindService(connection)
     }
 }
+
